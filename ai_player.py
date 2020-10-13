@@ -76,4 +76,12 @@ def board_move(board, p1_score, p2_score, limit = 10):
 
     print(f'scores {scores}')
 
+    score_max = 0
+    score_max_index = 0
+    for i in [6, 7, 8, 9, 10, 11]:
+        if scores[i] > score_max:
+            score_max = scores[i]
+            score_max_index = i
+
     print('game over')
+    return score_max_index

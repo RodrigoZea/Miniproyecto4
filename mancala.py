@@ -43,12 +43,14 @@ def main():
             i = int(input("choose your move index: "))
             board_move(board, i)
         else:
-            ai.board_move(board, p1, p2)
+            p1_turn = False
+            ai_move = ai.board_move(board, p1, p2)
+            board_move(board, ai_move)
         
         print("")
         if not another_turn:
             p1_turn = not p1_turn
-            
+
 def board_move(board, move):
     global p1, p2, another_turn
 
