@@ -6,6 +6,18 @@ INTEGRANTES
 Sebastian Arriola
 Rodrigo Zea
 """
+import ai_player as ai
+import utils as utils
+
+# puntaje
+p1, p2 = 0, 0
+
+# llevar control de turnos
+p1_turn = True
+another_turn = False
+
+# inicializar tablero, por ahora solo con una piedra en cada casilla
+board = [1 for _ in range(12)]
 
 def main():
     print("""
@@ -18,6 +30,24 @@ def main():
 
     cpu_lvl = input("Escoga el nivel de la computadora: ")
 
+    # loop de juego para probar
+    while not utils.game_over(board):
+        another_turn = False
+
+        print(f'points: p1 {p1}, p2 {p2}')
+        utils.print_board(board, p1_turn)
+        print(f'\n\nit is player {"1" if p1_turn else "AI"} turn')
+        
+        if p1_turn:
+            i = int(input("choose your move index: "))
+            move(board, i)
+        else:
+            ai.move(board, p1, p2)
+        
+        print("")
+        if not another_turn:
+            p1_turn = not p1_turn
+
 def montecarlo(iters=0):
     print("hola aca va montecarlo!!!")
 
@@ -25,5 +55,27 @@ def game():
     print("""
     Imprimir interfaz de linea de comando jeje
     """)
+
+def move(board, move):
+    global p1, p2, another_turn
+
+    stones = board[move]
+    board[move] = 0
+    move = (move + 1) % 12
+
+    while stones > 0:
+        if move == 6 and p1_turn:
+            stones -= 1
+            p1 += 1
+            another_turn = True
+        if move == 0 and not p1_turn:
+            stones -= 1
+            p2 += 1
+            another_turn = True
+
+        if stones > 0:
+            board[move % 12] += 1
+            stones -= 1
+            move += 1
 
 main()
