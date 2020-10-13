@@ -20,6 +20,7 @@ another_turn = False
 board = [1 for _ in range(12)]
 
 def main():
+    global p1_turn
     print("""
     ¡Bienvenido al juego de Mancala
     Los niveles de computadora disponibles son:
@@ -40,23 +41,15 @@ def main():
         
         if p1_turn:
             i = int(input("choose your move index: "))
-            move(board, i)
+            board_move(board, i)
         else:
-            ai.move(board, p1, p2)
+            ai.board_move(board, p1, p2)
         
         print("")
         if not another_turn:
             p1_turn = not p1_turn
-
-def montecarlo(iters=0):
-    print("hola aca va montecarlo!!!")
-
-def game():
-    print("""
-    Imprimir interfaz de linea de comando jeje
-    """)
-
-def move(board, move):
+            
+def board_move(board, move):
     global p1, p2, another_turn
 
     stones = board[move]
@@ -67,15 +60,27 @@ def move(board, move):
         if move == 6 and p1_turn:
             stones -= 1
             p1 += 1
-            another_turn = True
+            # ends turn in mancala
+            if stones == 0:
+                another_turn = True
         if move == 0 and not p1_turn:
             stones -= 1
             p2 += 1
-            another_turn = True
+            # ends turn in mancala
+            if stones == 0:
+                another_turn = True
 
         if stones > 0:
             board[move % 12] += 1
             stones -= 1
             move += 1
+
+    # player drops a stone on last slot visited
+    if board[move-1] == 1:
+        # apply score
+        # since move ends in offset +2, 13 is mirror slot
+        p1 += board[13 - move]
+        # remove stones from mirror slot
+        board[13 - move] = 0
 
 main()

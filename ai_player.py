@@ -16,20 +16,31 @@ def apply_move(board, move, p1_turn, scores):
         if move_index == 6 and p1_turn:
             stones -= 1
             scores['p1'] += 1
-            repeat_turn = True
+            # ends turn in mancala
+            if stones == 0:
+                another_turn = True
         if move_index == 0 and not p1_turn:
             stones -= 1
             scores['p2'] += 1
-            repeat_turn = True
+            # ends turn in mancala
+            if stones == 0:
+                another_turn = True
 
         if stones > 0:
             board[move_index % 12] += 1
             stones -= 1
             move_index += 1
 
+    # player drops a stone on last slot visited
+    if board[move] == 1:
+        # apply score
+        p1 += board[13 - move]
+        # remove stones from mirror
+        board[13 - move] = 0
+
     return board, repeat_turn
 
-def move(board, p1_score, p2_score):
+def board_move(board, p1_score, p2_score, limit = 10):
     temp_board = copy.deepcopy(board)
     scores = {'p1': p1_score, 'p2': p2_score}
     iters = 0
@@ -39,7 +50,7 @@ def move(board, p1_score, p2_score):
     for move in utils.legal_moves(board, p1_turn):
         scores[move] = 0
 
-    while iters < 10:
+    while iters < limit:
         moves = utils.legal_moves(temp_board, p1_turn)
         move = random.choice(moves)
         path.append(move)
@@ -59,6 +70,8 @@ def move(board, p1_score, p2_score):
             p1_turn = False
             iters += 1
             temp_board = copy.copy(board)
+            scores['p1'] = 0
+            scores['p2'] = 0
             path.clear()
 
     print(f'scores {scores}')
