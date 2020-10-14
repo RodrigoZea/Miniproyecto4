@@ -37,3 +37,9 @@ def game_over(board):
     if s == 0:
         return True
     return False
+
+def leftovers(board):
+    p1 = reduce((lambda x, y: x + y), board[:6])
+    p2 = reduce((lambda x, y: x + y), board[6:])
+
+    return p1, p2
