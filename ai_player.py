@@ -42,14 +42,16 @@ def apply_move(board, move, p1_turn, scores):
             break
         move_index = (move_index + 1) % 12
 
-    # player drops a stone on last slot visited
+    # jugador deja ultima piedra en un espacio vacio propio, captura su piedra
+    # y las de enfrente del otro jugador
     if last_move_index >= 0 and board[last_move_index] == 1:
-        # since move ends in offset +2, 13 is mirror slot
         if p1_turn and last_move_index < 6:
-            scores['p1'] += board[11 - last_move_index]
+            scores['p1'] += (board[11 - last_move_index] + 1)
+            board[last_move_index] = 0
             board[11 - last_move_index] = 0
         elif not p1_turn and last_move_index >= 6:
-            scores['p2'] += board[11 - last_move_index]
+            scores['p2'] += (board[11 - last_move_index] + 1)
+            board[last_move_index] = 0
             board[11 - last_move_index] = 0
 
     return board, repeat_turn
@@ -90,17 +92,9 @@ def board_move(board, p1_score, p2_score, limit = 10):
             scores['p2'] += p2_l
             
             if scores['p1'] > scores['p2']:
-                for move in set(path):
-                    scores[move] -= 1
+                scores[path[0]] -= 1
             else:
-                # actualizar el puntaje de los posibles tiros
-                for move in set(path):
-                    scores[move] += 1
-
-            # TODO: quitar para entrega
-            # print(f'iteration {iters} done...')
-            # print(f'path {path}')
-            # print(f'scores  {scores}')
+                scores[path[0]] += 1
 
             p1_turn = False
             iters += 1
@@ -117,9 +111,5 @@ def board_move(board, p1_score, p2_score, limit = 10):
             if scores[i] > score_max:
                 score_max = scores[i]
                 score_max_index = i
-
-    # TODO: quitar para entrega
-    # print(f'ai chose move {score_max_index}')
-    # print(f'final path scores {scores}')
     
     return score_max_index

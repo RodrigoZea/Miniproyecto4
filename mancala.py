@@ -19,7 +19,7 @@ p1_turn = True
 another_turn = False
 
 # inicializar tablero, por ahora solo con una piedra en cada casilla
-board = [3 for _ in range(BOARD_SIZE)]
+board = [4 for _ in range(BOARD_SIZE)]
 
 def main():
     global p1, p2, p1_turn
@@ -78,6 +78,8 @@ def main():
         print('AI TE GANO XDXDXDXD')
     else:
         print('EMPATE, QUE NOOBSTER')
+    print('************* PUNTAJE FINAL ****************')
+    print(f'Player: {p1}, AI: {p2}')
     print('############################################')
 
 def board_move(board, move):
@@ -117,14 +119,16 @@ def board_move(board, move):
             break
         move_index = (move_index + 1) % BOARD_SIZE
 
-    # player drops a stone on last slot visited
+    # jugador deja ultima piedra en un espacio vacio propio, captura su piedra
+    # y las de enfrente del otro jugador
     if last_move_index >= 0 and board[last_move_index] == 1:
-        # since move ends in offset +2, 13 is mirror slot
         if p1_turn and last_move_index < 6:
-            p1 += board[11 - last_move_index]
+            p1 += (board[11 - last_move_index] + 1)
+            board[last_move_index] = 0
             board[11 - last_move_index] = 0
         elif not p1_turn and last_move_index >= 6:
-            p2 += board[11 - last_move_index]
+            p2 += (board[11 - last_move_index] + 1)
+            board[last_move_index] = 0
             board[11 - last_move_index] = 0
 
 main()
