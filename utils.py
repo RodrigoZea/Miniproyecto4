@@ -1,19 +1,22 @@
 from functools import reduce
 
-def print_board(board, p1_turn):
+def print_board(board, p1_turn, p1_score, p2_score):
     if p1_turn:
         for i in range(11, 5, -1):
-            print(f'{board[i]}|', end="", flush=True)
+            print(f'| {board[i]} | ', end="", flush=True)
+        print(f'PUNTAJE P2 (AI): {p2_score}', end="", flush=True)
         print("")
         for i in range(6):
-            print(f'{board[i]}|', end="", flush=True)
+            print(f'| {board[i]} | ', end="", flush=True)
+        print(f'PUNTAJE P1: {p1_score}', end="", flush=True)
         print("")
+        
     else:
         for i in range(5, -1, -1):
-            print(f'{board[i]}|', end="", flush=True)
+            print(f'| {board[i]} |', end="", flush=True)
         print("")
         for i in range(6, 12):
-            print(f'{board[i]}|', end="", flush=True)
+            print(f'| {board[i]} |', end="", flush=True)
         print("")
 
 def legal_moves(board, p1_turn):

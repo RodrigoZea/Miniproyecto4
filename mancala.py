@@ -49,13 +49,13 @@ def main():
         print(f'points: p1 {p1}, p2 {p2}')
         print(f'\n\nit is player {"1" if p1_turn else "AI"} turn')
         if p1_turn:
-            utils.print_board(board, True)
+            utils.print_board(board, True, p1, p2)
         
         if p1_turn:
             i = int(input("choose your move index: "))
             board_move(board, i)
             print('board after your move:')
-            utils.print_board(board, True)
+            utils.print_board(board, True, p1, p2)
             print('########################################')
         else:
             ai_move = ai.board_move(board, p1, p2, limit=cpu_lvl)
